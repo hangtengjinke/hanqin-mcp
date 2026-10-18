@@ -1,0 +1,43 @@
+# 瀚钦术数排盘系统 V1.0 (c) 2026 瀚钦（丹东）智能科技有限公司. All rights reserved.
+# 打包目标：hanqin-mcp —— 供 WorkBuddy 连接器以 stdio 方式拉起的 MCP 服务。
+# 只打包确定性计算所需的子包（core / knowledge），
+# 不打包 FastAPI 服务层与桌面端，避免把 fastapi、pywebview、pywin32 带进用户环境。
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hanqin-mcp"
+version = "1.0.0"
+description = "瀚钦 · 国学历法计算 MCP 服务：真太阳时换算、定气节气、干支四柱、奇门与八字盘面结构"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "LicenseRef-Proprietary"
+authors = [{ name = "瀚钦（丹东）智能科技有限公司" }]
+keywords = ["mcp", "calendar", "ganzhi", "qimen", "bazi", "chinese-calendar"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Other/Nonlisted Topic",
+]
+dependencies = [
+    "lunar_python>=1.4.8",
+    "pydantic>=2.6",
+    "mcp>=1.9,<2",
+    "uvicorn>=0.29",      # 仅 streamable-http 模式需要
+]
+
+[project.optional-dependencies]
+http = ["uvicorn[standard]>=0.29"]
+
+[project.scripts]
+hanqin-mcp = "app.mcp_server:main"
+
+[project.urls]
+Homepage = "https://github.com/hangtengjinke/hanqin-mcp"
+
+[tool.setuptools]
+packages = ["app", "app.core", "app.knowledge"]
+
+[tool.setuptools.package-data]
+"app.core" = ["*.json"]
